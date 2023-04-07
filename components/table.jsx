@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-const RainfallTable = ({ rainfallData }) => {
-
+const RainfallTable = ({ rainfallData, className }) => {
   return (
-    <table border={1} cellPadding={2}>
+    <table class={className} cellPadding={0} cellSpacing={0}>
       <thead>
         <tr>
           <th key={0}>Region Name</th>
           {rainfallData[0].data.map((headers, i) => {
-            return <th key={i}>{new Date(headers.date).toDateString()}</th>;
+            return <th key={`headers_${i}`}>{new Date(headers.date).toDateString()}</th>;
           })}
-          <th>Total Rainfall</th>
-          <th>Average Rainfall</th>
-          <th>Consecutive days of rainfail &gt; 10mm</th>
+          <th key="headers_total">Total Rainfall</th>
+          <th key="headers_average">Average Rainfall</th>
+          <th key="headers_count">Consecutive days of rainfail &gt; 10mm</th>
         </tr>
       </thead>
       <tbody>
-        {rainfallData.map((row, i) => {
+        {rainfallData.map((row, k) => {
           let total = 0;
           let average = 0;
           let count = 0;
@@ -28,14 +27,14 @@ const RainfallTable = ({ rainfallData }) => {
           });
           average = Math.round(total / row.data.length * 100) / 100;
           return (
-            <tr>
+            <tr key={`row_${k}`}>
               <td>{row.region}</td>
-              {row.data.map((rowValues, i) => {
-                return <td key={i}>{rowValues.value}</td>;
+              {row.data.map((rowValues, j) => {
+                return <td key={`body_${j}`}>{rowValues.value}</td>;
               })}
-              <td>{total}</td>
-              <td>{average}</td>
-              <td>{count}</td>
+              <td key="body_total">{total}</td>
+              <td key="body_average">{average}</td>
+              <td key="body_count">{count}</td>
             </tr>
           );
         })}
